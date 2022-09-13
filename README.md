@@ -6,7 +6,8 @@ Implemented jwt wit flask framework.
 
 For sending response , we are using serializer module marshmallow. We are also doing custom validation via this module.
 
-We have added migration feature which has following commands :
+We have added migration feature which has following commands.
+
     1. python3 manage.py db init   
     2. python3 manage.py db migrate
     3. python3 manage.py db upgrade
