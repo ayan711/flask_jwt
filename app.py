@@ -8,6 +8,7 @@ import jwt
 import datetime
 from config import Config
 from flask_swagger import swagger
+from utils.http_status_code import *
 
 
 app = Flask(__name__)
@@ -25,7 +26,7 @@ from marshmallow import Schema, fields, ValidationError
 
 @app.route('/')
 def hello():
-    return jsonify({"message":"Hello World!"}),200
+    return jsonify({"message":"Hello World!"}),HTTP_200_OK
 
 @app.route("/spec")
 def spec():
@@ -57,7 +58,7 @@ def token_required(f):
            
        except:
            
-           return jsonify({'message': 'token is invalid'})
+           return jsonify({'message': 'token is invalid'}),HTTP_401_UNAUTHORIZED
  
        return f(current_user, *args, **kwargs)
    return decorator
@@ -72,14 +73,14 @@ def signup_user():
    new_user = Users(public_id=str(uuid.uuid4()), name=data['name'], password=hashed_password, admin=False)
    db.session.add(new_user) 
    db.session.commit()   
-   return jsonify({'message': 'registered successfully'}),201
+   return jsonify({'message': 'registered successfully'}),HTTP_201_CREATED
 
 
 @app.route('/login', methods=['POST']) 
 def login_user():
    auth = request.authorization  
    if not auth or not auth.username or not auth.password: 
-       return make_response('could not verify', 401, {'Authentication': 'login required"'})   
+       return make_response('could not verify', HTTP_401_UNAUTHORIZED, {'Authentication': 'login required"'})   
  
    user = Users.query.filter_by(name=auth.username).first()  
    if check_password_hash(user.password, auth.password):
@@ -87,7 +88,7 @@ def login_user():
  
        return jsonify({'token' : token})
  
-   return make_response({'messgae':'could not verify'},  401, {'Authentication': '"login required"'})
+   return make_response({'messgae':'could not verify'},  HTTP_401_UNAUTHORIZED, {'Authentication': '"login required"'})
 
 @app.route('/delete_user/<user_id>',methods=['POST'])
 @token_required
@@ -98,19 +99,19 @@ def delete_user(current_user,user_id):
     
     if  not admin :
         
-        return jsonify({"message":"Admin access required"}),401
+        return jsonify({"message":"Admin access required"}),HTTP_403_FORBIDDEN
     
     user = Users.query.filter_by(id=user_id).first()
     
     if not user:
         
-        return jsonify({"message":"User not found"},404)
+        return jsonify({"message":"User not found"},HTTP_404_NOT_FOUND)
     
     
     db.session.delete(user)
     db.session.commit()
     
-    return jsonify({"message":"User deleted"}),204
+    return jsonify({"message":"User deleted"}),HTTP_204_NO_CONTENT
 
 
 @app.route('/users', methods=['GET'])
@@ -126,7 +127,7 @@ def get_all_users():
        user_data['admin'] = user.admin
      
        result.append(user_data)  
-   return jsonify({'users': result})
+   return jsonify({'users': result}),HTTP_200_OK
 
 @app.route('/book', methods=['POST'])
 @token_required
@@ -137,7 +138,7 @@ def create_book(current_user):
     try:
         data = book_schema.load(data)
     except ValidationError as err:
-        return err.messages, 422
+        return err.messages, HTTP_422_UNPROCESSABLE_ENTITY
 
     if 'book_prize' not in data:
         data['book_prize'] = None
@@ -153,7 +154,7 @@ def create_book(current_user):
         db.session.rollback()
         print("Rollbacked ---------------------------")
         
-        return jsonify({'message' : str(err)}),400
+        return jsonify({'message' : str(err)}),HTTP_400_BAD_REQUEST
 
     return jsonify({'message' : 'new books created','data':book_schema.dump(data)})
 
@@ -164,7 +165,7 @@ def get_books(current_user):
    books = Books.query.filter_by(user_id=current_user.id).all()
 
  
-   return jsonify({'list_of_books' : books_schema.dump(books)})
+   return jsonify({'list_of_books' : books_schema.dump(books)}),HTTP_200_OK
 
 if __name__ == '__main__':
     app.run(debug=True)
