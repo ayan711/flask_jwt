@@ -6,7 +6,7 @@ from functools import wraps
 import uuid
 import jwt
 import datetime
-from .src.config import Config
+from .Config.config import Config
 from flask_swagger import swagger
 from ..utils.http_status_code import *
 

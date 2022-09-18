@@ -14,7 +14,7 @@ def create_app(test_config=None):
     if test_config is None:
         app.config.from_mapping(
             SECRET_KEY='004f2af45d3a4e161a7dd2d17fdae47f',
-            SQLALCHEMY_DATABASE_URI='sqlite:///../bookstore.db',
+            SQLALCHEMY_DATABASE_URI='sqlite:///..//bookstore.db',
             SQLALCHEMY_TRACK_MODIFICATIONS=False,
             JWT_SECRET_KEY='004f2af45d3a4e161a7dd2d17fdae47f',
 

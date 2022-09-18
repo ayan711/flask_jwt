@@ -19,4 +19,5 @@ class Books(db.Model):
    Author = db.Column(db.String(50), unique=True, nullable=False)
    Publisher = db.Column(db.String(50), nullable=False)
    book_prize = db.Column(db.Integer)
-
+   created_at = db.Column(db.DateTime, default=datetime.now())
+   updated_at = db.Column(db.DateTime, onupdate=datetime.now())

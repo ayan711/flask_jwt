@@ -1,3 +1,4 @@
+import imp
 from flask import Blueprint,jsonify,request,make_response
 from functools import wraps
 
@@ -8,7 +9,7 @@ from src.models import Users,db
 from src.serializers import book_schema,books_schema
 from marshmallow import Schema, fields, ValidationError
 from src.utils.http_status_code import *
-from src.config import Config
+from src.config.config import Config
 
 
 auth = Blueprint("auth",__name__,url_prefix='/auth')
