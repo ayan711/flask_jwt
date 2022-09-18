@@ -1,4 +1,8 @@
-from app import db
+# from . import app
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+db = SQLAlchemy()
 
 class Users(db.Model):
    id = db.Column(db.Integer, primary_key=True)
@@ -15,3 +19,4 @@ class Books(db.Model):
    Author = db.Column(db.String(50), unique=True, nullable=False)
    Publisher = db.Column(db.String(50), nullable=False)
    book_prize = db.Column(db.Integer)
+

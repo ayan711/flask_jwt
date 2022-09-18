@@ -12,3 +12,5 @@ We have added migration feature which has following commands.
     2. python3 manage.py db migrate
     3. python3 manage.py db upgrade
     4. python3 manage.py db downgrade
+
+--> Refering to project - https://github.com/CryceTruly/bookmarker-api/tree/main/src

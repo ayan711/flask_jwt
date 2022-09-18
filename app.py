@@ -1,4 +1,4 @@
-import json
+import json,os
 from flask import Flask, jsonify, make_response, request
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_sqlalchemy import SQLAlchemy
@@ -6,22 +6,22 @@ from functools import wraps
 import uuid
 import jwt
 import datetime
-from config import Config
+from .src.config import Config
 from flask_swagger import swagger
-from utils.http_status_code import *
+from ..utils.http_status_code import *
 
 
 app = Flask(__name__)
  
-app.config['SECRET_KEY']='004f2af45d3a4e161a7dd2d17fdae47f'
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///bookstore.db'
+app.config['SECRET_KEY']=os.environ.get('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('SQLALCHEMY_DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
  
-db = SQLAlchemy(app)
 
-from models import *
-from serializers import book_schema,books_schema
+
+from .src.models import *
+from .src.serializers import book_schema,books_schema
 from marshmallow import Schema, fields, ValidationError
 
 @app.route('/')

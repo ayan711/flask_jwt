@@ -1,7 +1,7 @@
 import os
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from config import Config
+from src.config import Config
 
 from app import app, db
 
