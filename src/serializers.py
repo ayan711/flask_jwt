@@ -26,7 +26,7 @@ class BookSchema(Schema):
     Author = fields.Str(required=True,validate=must_not_be_ayan)
     name = fields.Str(required=True)
     Publisher = fields.Str(required=True)
-    book_prize = fields.Int(dump_only=True)
+    book_prize = fields.Int(required=True)
 
 book_schema = BookSchema()
 books_schema = BookSchema(many=True)

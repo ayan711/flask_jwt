@@ -8,3 +8,4 @@ flask-script==2.0.5
 marshmallow
 flask-swagger
 flask-blueprint
+python-dotenv

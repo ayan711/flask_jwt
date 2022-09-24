@@ -19,9 +19,11 @@ books = Blueprint("books",__name__,url_prefix='')
 def create_book(current_user):
  
     data = request.get_json()
+    print(data)
 
     try:
         data = book_schema.load(data)
+        
     except ValidationError as err:
         return err.messages, HTTP_422_UNPROCESSABLE_ENTITY
 

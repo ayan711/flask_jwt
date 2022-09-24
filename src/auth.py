@@ -11,37 +11,43 @@ from marshmallow import Schema, fields, ValidationError
 from src.utils.http_status_code import *
 from src.config.config import Config
 
+from dotenv import load_dotenv
+load_dotenv()
 
 auth = Blueprint("auth",__name__,url_prefix='/auth')
 
 def token_required(f):
    @wraps(f)
    def decorator(*args, **kwargs):
-       token = None
+        token = None
 
-        #    print(vars(request))
+        print(vars(request))
+        
+        try:
        
-       if request.headers['Authorization']:
+            if request.headers['Authorization']:
 
-            print(request.headers['Authorization'])
-            token = (request.headers['Authorization']).split(' ')[1]
+                token = (request.headers['Authorization']).split(' ')[1]
+                
+        except Exception as e :
             
-           
+            return jsonify({'message': 'Auth token required'}),401
+            
         #    if 'x-access-tokens' in request.headers:
         #        token = request.headers['x-access-tokens']
  
-       if not token:
-           return jsonify({'message': 'a valid token is missing'})
-       try:
-           
-           data = jwt.decode(token,Config.SECRET_KEY, algorithms=["HS256"])
-           current_user = Users.query.filter_by(public_id=data['public_id']).first()
-           
-       except:
-           
-           return jsonify({'message': 'token is invalid'}),HTTP_401_UNAUTHORIZED
- 
-       return f(current_user, *args, **kwargs)
+        if not token:
+            return jsonify({'message': 'a valid token is missing'})
+        try:
+            
+            data = jwt.decode(token,Config.SECRET_KEY, algorithms=["HS256"])
+            current_user = Users.query.filter_by(public_id=data['public_id']).first()
+            
+        except:
+            
+            return jsonify({'message': 'token is invalid'}),HTTP_401_UNAUTHORIZED
+    
+        return f(current_user, *args, **kwargs)
    return decorator
 
 
