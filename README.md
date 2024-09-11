@@ -4,7 +4,8 @@ Implemented jwt with flask framework.
     2. Generates jwt
     3. Protected APIs required the jwt as Bearer token
 
-For sending response , we are using serializer module marshmallow. We are also doing custom validation via this module.
+For sending response , we are using serializer module marshmallow. 
+We are also doing custom validation via this module.
 
 We have added migration feature which has following commands.
 
