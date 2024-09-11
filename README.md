@@ -1,4 +1,4 @@
-Implemented jwt wit flask framework.
+Implemented jwt with flask framework.
 
     1. Needs user creds for login
     2. Generates jwt
